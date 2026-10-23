@@ -1,0 +1,312 @@
+{%
+    color-php: #4F5B93
+    color-php-hover: #3f4875
+%}
+
+*,
+*::before,
+*::after
+{
+    box-sizing: border-box;
+}
+
+html,
+body
+{
+    font-family: sans-serif;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    color: #ccc;
+}
+
+.container
+{
+    max-width: 75rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+}
+
+header,
+footer
+{
+    background-color: {% metadata.color-php %};
+    color: #ccc;
+}
+
+header
+{
+    position: sticky;
+    top: 0;
+}
+
+header label
+{
+    cursor: pointer;
+}
+
+header a
+{
+    color: white;
+    text-decoration: none;
+}
+
+header.small
+{
+    border-bottom: 1px solid #6d7ec7;
+}
+
+header h1
+{
+    margin: 0.6rem 0;
+}
+
+header h1 .static,
+nav.side-nav .logo .static
+{
+    font-weight: bold;
+}
+
+header h1 .php,
+nav.side-nav .logo .php
+{
+    font-style: italic;
+    font-weight: 500;
+}
+
+body > nav.top-nav
+{
+    background-color: #1f1f1f;
+    color: #ffffff;
+    white-space: nowrap;
+    display: none;
+}
+
+body > nav.top-nav .container
+{
+    overflow-x: auto;
+}
+
+body > nav.top-nav a
+{
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.6rem 1rem;
+}
+
+body > nav.top-nav a.current
+{
+    font-weight: bold;
+}
+
+body > nav.top-nav a:hover
+{
+    background-color: #333;
+}
+
+body > nav.top-nav .container
+{
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    flex-wrap: nowrap;
+}
+
+main .container
+{
+    max-width: 50rem;
+    line-height: 1.8;
+}
+
+main a,
+footer a
+{
+    font-weight: 700;
+    color: #ccc;
+}
+
+main a:hover,
+footer a:hover
+{
+    color: #fff;
+}
+
+pre
+{
+    overflow-x: auto;
+}
+
+pre,
+code
+{
+    background-color: #222;
+    padding: 0.5rem;
+}
+
+code
+{
+    padding: 0.3rem 0.5rem;
+}
+
+pre
+{
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 0.5rem 1rem;
+    width: calc( 100% + 2rem );
+}
+
+code.codeblock
+{
+    padding: 0;
+    line-height: normal;
+}
+
+code.codeblock::before
+{
+    font-weight: bold;
+    background-color: #181818;
+    display: block;
+    width: max-content;
+    padding: 0.5rem 1rem;
+    margin: -0.5rem -1rem;
+    content: 'Code Block';
+}
+
+code.codeblock-plaintext::before
+{
+    content: 'Text';
+}
+
+code.codeblock-bash::before
+{
+    content: 'Bash';
+}
+
+code.codeblock-php::before
+{
+    content: 'PHP';
+}
+
+code.codeblock-html::before
+{
+    content: 'HTML';
+}
+
+code.codeblock-css::before
+{
+    content: 'CSS';
+}
+
+code.codeblock-js::before
+{
+    content: 'JS';
+}
+
+#side-nav-toggle
+{
+    display: none;
+}
+
+#side-nav-toggle:checked ~ #side-nav-forcefield
+{
+    display: block;
+}
+
+#side-nav-toggle:checked ~ nav.side-nav
+{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: {% metadata.color-php %};
+    color: #fff;
+    width: 100%;
+    z-index: 999999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: scroll;
+}
+
+#side-nav-toggle:checked ~ nav.side-nav .logo a
+{
+    font-size: 1.6rem;
+}
+
+#side-nav-toggle:checked ~ nav.side-nav .logo,
+#side-nav-toggle:checked ~ nav.side-nav .nav-items,
+#side-nav-toggle:checked ~ nav.side-nav .controls
+{
+    display: flex;
+    flex-direction: column;
+}
+
+#side-nav-toggle:checked ~ nav.side-nav a,
+#side-nav-toggle:checked ~ nav.side-nav label
+{
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: #ccc;
+}
+
+#side-nav-toggle:checked ~ nav.side-nav .logo,
+#side-nav-toggle:checked ~ nav.side-nav .logo a,
+#side-nav-toggle:checked ~ nav.side-nav a:hover,
+#side-nav-toggle:checked ~ nav.side-nav label:hover
+{
+    background-color: {% metadata.color-php-hover %};
+    color: #fff;
+}
+
+#side-nav-toggle:checked ~ nav.side-nav a.current
+{
+    color: #fff;
+    font-weight: bold;
+}
+
+#side-nav-forcefield
+{
+    display: none;
+    background-color: rgba( 0, 0, 0, 0.4 );
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 888888;
+    backdrop-filter: blur( 0.2rem );
+}
+
+nav.side-nav
+{
+    display: none;
+}
+
+@media( min-width: 600px )
+{
+    #side-nav-toggle:checked ~ nav.side-nav
+    {
+        max-width: 20rem;
+    }
+}
+
+@media( min-width: 800px )
+{
+    pre,
+    code
+    {
+        border-radius: 0.5rem;
+    }
+
+    code.code-block::before
+    {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+}

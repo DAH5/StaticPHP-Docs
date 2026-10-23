@@ -1,0 +1,101 @@
+name: Build and Deploy Static Website
+
+concurrency:
+  group: static-site-deploy
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      CLOUDFLARE_PAGES_PROJECT_NAME: staticphp-docs
+      KATAPULT_OBJECT_STORAGE_REGION: uk-lon-1
+      KATAPULT_OBJECT_STORAGE_HOSTNAME: uk-lon-1.katapultobjects.com
+      KATAPULT_OBJECT_STORAGE_BUCKET_NAME: staticphp-docs
+      OUTPUT_DIRECTORY: public
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: Run StaticPHP build
+        run: php StaticPHP-Launcher.php
+
+      - name: Deploy Site to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy ${{ env.OUTPUT_DIRECTORY }} --project-name=${{ env.CLOUDFLARE_PAGES_PROJECT_NAME }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install s3cmd
+        run: sudo apt-get install -y s3cmd
+
+      - name: Configure s3cmd for Krystal Cloud Object Storage
+        run: |
+          cat > ~/.mime.types <<EOF
+          text/html       html htm
+          text/css        css
+          application/javascript js
+          application/json json
+          image/svg+xml   svg
+          EOF
+
+          cat > ~/.s3cfg <<EOF
+          [default]
+          access_key = ${{ secrets.KATAPULT_ACCESS_KEY }}
+          secret_key = ${{ secrets.KATAPULT_SECRET_KEY }}
+          host_base = ${{ env.KATAPULT_OBJECT_STORAGE_HOSTNAME }}
+          host_bucket = %(bucket)s.${{ env.KATAPULT_OBJECT_STORAGE_HOSTNAME }}
+          bucket_location = ${{ env.KATAPULT_OBJECT_STORAGE_REGION }}
+          signature_v2 = True
+          use_https = True
+          mime_types = /home/runner/.mime.types
+          EOF
+
+      - name: Deploy Site to Krystal Cloud Object Storage
+        run: |
+          s3cmd sync "${{ env.OUTPUT_DIRECTORY }}/" "s3://$KATAPULT_OBJECT_STORAGE_BUCKET_NAME/" \
+            --delete-removed \
+            --acl-public \
+            --guess-mime-type \
+            --no-mime-magic \
+            --no-preserve
+      
+      - name: Fix Mime Type Mismatches on Krystal Cloud Object Storage
+        run: |
+          set -euo pipefail
+
+          fix_mime() {
+            pattern="$1"
+            type="$2"
+
+            find "${{ env.OUTPUT_DIRECTORY }}" -type f -name "$pattern" | while read -r file; do
+              key="${file#${{ env.OUTPUT_DIRECTORY }}/}"
+              echo "Fixing $key -> $type"
+
+              s3cmd modify \
+                --add-header="Content-Type:${type}" \
+                "s3://$KATAPULT_OBJECT_STORAGE_BUCKET_NAME/$key"
+            done
+          }
+
+          fix_mime "*.html" "text/html"
+          fix_mime "*.htm" "text/html"
+          fix_mime "*.css" "text/css"
+          fix_mime "*.js" "application/javascript"
+          fix_mime "*.json" "application/json"
+          fix_mime "*.svg" "image/svg+xml"

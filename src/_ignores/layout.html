@@ -1,0 +1,84 @@
+{%
+content_placeholder: {{ content_placeholder }}
+%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>StaticPHP Docs</title>
+        
+        <link rel="stylesheet" type="text/css" href="/assets/css/stylesheet.css">
+    </head>
+    
+    <body>
+        <header class="small">
+            <div class="container">
+                <nav>
+                    <a href="https://www.staticphp.com">Back to Main Site</a>
+                </nav>
+            </div>
+        </header>
+
+        <header>
+            <div class="container">
+                <h1><label for="side-nav-toggle">&#9776;</label> <a href="/"><span class="static">Static</span><span class="php">PHP</span> <span class="docs">Docs</span></a></h1>
+            </div>
+        </header>
+
+        <nav class="top-nav">
+            <div class="container">
+                <a href="/Getting-Started/"{% if( docs_nav_item == "getting-started" ) %} class="current"{% endif %}>Getting Started</a>
+                <a href="/MetaData/"{% if( docs_nav_item == "metadata" ) %} class="current"{% endif %}>MetaData</a>
+                <a href="/Functional-Blocks/"{% if( docs_nav_item == "functional-blocks" ) %} class="current"{% endif %}>Functional-Blocks</a>
+                <a href="/Customisation/"{% if( docs_nav_item == "customisation" ) %} class="current"{% endif %}>Customisation</a>
+                <a href="/HTML-Files/"{% if( docs_nav_item == "html-files" ) %} class="current"{% endif %}>HTML Files</a>
+                <a href="/PHP-Files/"{% if( docs_nav_item == "php-files" ) %} class="current"{% endif %}>PHP Files</a>
+                <a href="/Markdown-Files/"{% if( docs_nav_item == "markdown-files" ) %} class="current"{% endif %}>Markdown Files</a>
+                <a href="/Redirections/"{% if( docs_nav_item == "redirections" ) %} class="current"{% endif %}>Redirections</a>
+                <a href="/Remote-Content/"{% if( docs_nav_item == "remote-content" ) %} class="current"{% endif %}>Remote Content</a>
+                <a href="/Testing/"{% if( docs_nav_item == "testing" ) %} class="current"{% endif %}>Testing</a>
+            </div>
+        </nav>
+
+        <main>
+            <div class="container">
+                {{ content_placeholder }}
+            </div>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>A <a href="https://www.dah5.me.uk" target="_blank">DAH5</a> production by <a href="https://www.davidhunter.scot" target="_blank">David Hunter</a>.</p>
+            </div>
+        </footer>
+
+        <input type="checkbox" id="side-nav-toggle">
+
+        <label id="side-nav-forcefield" for="side-nav-toggle"></label>
+
+        <nav class="side-nav">
+            <div class="logo">
+                <a href="/"><span class="static">Static</span><span class="php">PHP</span> <span class="docs">Docs</span></a>
+            </div>
+
+            <div class="nav-items">
+                <a href="/Getting-Started/"{% if( docs_nav_item == "getting-started" ) %} class="current"{% endif %}>Getting Started</a>
+                <a href="/MetaData/"{% if( docs_nav_item == "metadata" ) %} class="current"{% endif %}>MetaData</a>
+                <a href="/Functional-Blocks/"{% if( docs_nav_item == "functional-blocks" ) %} class="current"{% endif %}>Functional-Blocks</a>
+                <a href="/Customisation/"{% if( docs_nav_item == "customisation" ) %} class="current"{% endif %}>Customisation</a>
+                <a href="/HTML-Files/"{% if( docs_nav_item == "html-files" ) %} class="current"{% endif %}>HTML Files</a>
+                <a href="/PHP-Files/"{% if( docs_nav_item == "php-files" ) %} class="current"{% endif %}>PHP Files</a>
+                <a href="/Markdown-Files/"{% if( docs_nav_item == "markdown-files" ) %} class="current"{% endif %}>Markdown Files</a>
+                <a href="/Redirections/"{% if( docs_nav_item == "redirections" ) %} class="current"{% endif %}>Redirections</a>
+                <a href="/Remote-Content/"{% if( docs_nav_item == "remote-content" ) %} class="current"{% endif %}>Remote Content</a>
+                <a href="/Testing/"{% if( docs_nav_item == "testing" ) %} class="current"{% endif %}>Testing</a>
+            </div>
+
+            <div class="controls">
+                <label for="side-nav-toggle"><b>X</b> Close Menu</label>
+            </div>
+        </nav>
+    </body>
+</html>
