@@ -151,6 +151,7 @@ code
 code
 {
     padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
 }
 
 pre
@@ -165,6 +166,7 @@ code.codeblock
 {
     padding: 0;
     line-height: normal;
+    border-radius: 0;
 }
 
 code.codeblock::before
@@ -218,7 +220,7 @@ code.codeblock-js::before
     display: block;
 }
 
-#side-nav-toggle:checked ~ nav.side-nav
+nav.side-nav
 {
     display: flex;
     flex-direction: column;
@@ -229,26 +231,71 @@ code.codeblock-js::before
     z-index: 999999;
     position: fixed;
     top: 0;
-    left: 0;
+    left: -100%;
     bottom: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
+    box-shadow: 0 0 5px black;
 }
 
-#side-nav-toggle:checked ~ nav.side-nav .logo a
+#side-nav-toggle:checked ~ nav.side-nav
+{
+    animation-name: side-nav-slide-in;
+    animation-duration: 1s;
+    left: 0;
+}
+
+#side-nav-toggle:not( :checked ) ~ nav.side-nav
+{
+    left: -100%;
+}
+
+@media( prefers-reduced-motion: reduce )
+{
+    #side-nav-toggle:checked ~ nav.side-nav
+    {
+        animation-name: none;
+        animation-duration: 0;
+    }
+
+    #side-nav-toggle:not( :checked ) ~ nav.side-nav
+    {
+        animation-name: none;
+        animation-duration: 0;
+    }
+}
+
+nav.side-nav .logo a,
+nav.side-nav .logo label
 {
     font-size: 1.6rem;
 }
 
-#side-nav-toggle:checked ~ nav.side-nav .logo,
-#side-nav-toggle:checked ~ nav.side-nav .nav-items,
-#side-nav-toggle:checked ~ nav.side-nav .controls
+nav.side-nav .logo label
+{
+    font-weight: bold;
+}
+
+nav.side-nav .logo,
+nav.side-nav .nav-items,
+nav.side-nav .controls
 {
     display: flex;
+}
+
+nav.side-nav .logo
+{
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+nav.side-nav .nav-items,
+nav.side-nav .controls
+{
     flex-direction: column;
 }
 
-#side-nav-toggle:checked ~ nav.side-nav a,
-#side-nav-toggle:checked ~ nav.side-nav label
+nav.side-nav a,
+nav.side-nav label
 {
     padding: 1rem 1.5rem;
     font-size: 1.2rem;
@@ -256,16 +303,16 @@ code.codeblock-js::before
     color: #ccc;
 }
 
-#side-nav-toggle:checked ~ nav.side-nav .logo,
-#side-nav-toggle:checked ~ nav.side-nav .logo a,
-#side-nav-toggle:checked ~ nav.side-nav a:hover,
-#side-nav-toggle:checked ~ nav.side-nav label:hover
+nav.side-nav .logo,
+nav.side-nav .logo a,
+nav.side-nav a:hover,
+nav.side-nav label:hover
 {
     background-color: {% metadata.color-php-hover %};
     color: #fff;
 }
 
-#side-nav-toggle:checked ~ nav.side-nav a.current
+nav.side-nav a.current
 {
     color: #fff;
     font-weight: bold;
@@ -284,14 +331,22 @@ code.codeblock-js::before
     backdrop-filter: blur( 0.2rem );
 }
 
-nav.side-nav
+@keyframes side-nav-slide-in
 {
-    display: none;
+    from
+    {
+        left: -100%;
+    }
+
+    to
+    {
+        left: 0;
+    }
 }
 
 @media( min-width: 600px )
 {
-    #side-nav-toggle:checked ~ nav.side-nav
+    nav.side-nav
     {
         max-width: 20rem;
     }
@@ -300,7 +355,7 @@ nav.side-nav
 @media( min-width: 800px )
 {
     pre,
-    code
+    code.code-block
     {
         border-radius: 0.5rem;
     }
